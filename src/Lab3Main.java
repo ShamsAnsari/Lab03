@@ -1,7 +1,21 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Lab3Main {
+    final static String FILE_PATH = "output.txt";
     public static void main(String[] args) {
+
+        File output = new File(FILE_PATH);
+        try {
+            output.createNewFile();
+            new FileWriter(FILE_PATH, false).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
         final int SORT_SIZE_MAX = 16;
         int numElements = getUserInput(1, SORT_SIZE_MAX, "Enter number of elements: ");
@@ -16,7 +30,7 @@ public class Lab3Main {
 
         USD[] arr = choice == 1 ? new USD[numElements] : new C2D[numElements];
 
-        System.out.println("Enter money in form: X.XX");
+        write("Enter money in form: X.XX\n");
         for (int i = 0; i < numElements; i++) {
             double input = getUserInput(0.009, Double.MAX_VALUE, "\tArray[" + i + "] = ");
             arr[i] = choice == 1 ? new USD() : new C2D();
@@ -24,28 +38,50 @@ public class Lab3Main {
             arr[i].setCents((int) (input * 100 % 100));
         }
 
+
         mergeSort(arr, numElements);
 
 
     }
 
-
+    /**
+     * Sorts the array of USD's with mergesort
+     *
+     * @param arr  arr of USD's
+     * @param size size of array
+     */
     public static void mergeSort(USD arr[], int size) {
-
+        recurMergeSort(arr, 0, size - 1);
     }
 
-    public static void mergeSort(USD arr[], int left, int right) {
+    /**
+     * Recursive mergeSort function wrapper
+     *
+     * @param arr   array to sort
+     * @param left  left bound
+     * @param right right bound
+     */
+    public static void recurMergeSort(USD arr[], int left, int right) {
+
         if (left < right) {
             int mid = left + (right - left) / 2;
 
-            mergeSort(arr, left, mid);
-            mergeSort(arr, mid + 1, right);
+            recurMergeSort(arr, left, mid);
+            recurMergeSort(arr, mid + 1, right);
 
             merge(arr, left, mid, right);
-
+            printArray(arr);
         }
     }
 
+    /**
+     * MergeSort helper. "Merges" two two arrays by sorting them
+     *
+     * @param arr
+     * @param left
+     * @param mid
+     * @param right
+     */
     public static void merge(USD arr[], int left, int mid, int right) {
         int size1 = mid - left + 1;//left side
         int size2 = right - mid; //right side
@@ -60,10 +96,60 @@ public class Lab3Main {
 
         int i = 0, j = 0;
 
-        int k = left;
-        while( i < size1 && j < size2){
 
+        int k = left;
+        while (i < size1 && j < size2) {
+            if (L[i].compareTo(R[j]) < 0) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
         }
+
+
+        while (i < size1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        while (j < size2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
+
+    public static void write(Object obj){
+
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(FILE_PATH, true);
+            writer.write(obj.toString());
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.print(obj);
+
+
+    }
+    public static void printArray(Object[] arr) {
+
+        String out = "[";
+        for (Object obj : arr) {
+            out += obj + " ";
+        }
+        out = out.substring(0, out.length() - 1) + "]";
+        //System.out.println(out);
+        write(out + "\n");
+
     }
 
     /**
@@ -80,12 +166,14 @@ public class Lab3Main {
 
         int input;
         while (true) {
-            System.out.print(msg);
+            //System.out.print(msg);
+            write(msg);
             input = scan.nextInt();
             if (input <= upperBound && input >= lowerBound) {
                 break;
             }
-            System.out.println("\tBounds of input: [" + lowerBound + ", " + upperBound + "]");
+            //System.out.println("\tBounds of input: [" + lowerBound + ", " + upperBound + "]");
+            write("\tBounds of input: [" + lowerBound + ", " + upperBound + "]\n");
         }
         return input;
 
@@ -105,12 +193,15 @@ public class Lab3Main {
 
         double input;
         while (true) {
-            System.out.print(msg);
+            //System.out.print(msg);
+            write(msg);
             input = scan.nextDouble();
             if (input <= upperBound && input > lowerBound) {
                 break;
             }
-            System.out.println("\tBounds of input: [" + lowerBound + ", " + upperBound + "]");
+            //System.out.println("\tBounds of input: [" + lowerBound + ", " + upperBound + "]");
+            write("\tBounds of input: [" + lowerBound + ", " + upperBound + "]" + "\n");
+
         }
         return input;
 
