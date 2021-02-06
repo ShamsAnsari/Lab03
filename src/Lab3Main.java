@@ -1,10 +1,11 @@
 /**
  * Lab 3 - Sorting Arrays
- * @author Shams Ansari
  *
+ * @author Shams Ansari
+ * <p>
  * Prof: Manish Goel
  * Class: CIS 22C
- *
+ * <p>
  * Sorting an array using mergesort and printing out the steps
  */
 
@@ -83,7 +84,6 @@ public class Lab3Main {
      */
     public static void mergeSort(USD arr[], int size) {
         recurMergeSort(arr, 0, size - 1);
-        printArray(arr);
     }
 
     /**
@@ -94,14 +94,17 @@ public class Lab3Main {
      * @param right right bound
      */
     public static void recurMergeSort(USD arr[], int left, int right) {
-        printArray(arr); //print the array
         if (left < right) {
+            printArray(arr, left, right); //print the array
+
             int mid = left + (right - left) / 2;
 
             recurMergeSort(arr, left, mid); //Sort from left to middle
             recurMergeSort(arr, mid + 1, right); // Sort from middle to right
 
             merge(arr, left, mid, right); // Merge the left and right side of the bounds
+            printArray(arr, left, right); //print the array
+
         }
     }
 
@@ -138,9 +141,9 @@ public class Lab3Main {
             if (L[i].compareTo(R[j]) < 0) {
                 arr[k] = L[i];
                 i++;
-            //If number in right array is greater then number i left array
-            //Then add the number in right array to original array
-            //increment right array
+                //If number in right array is greater then number i left array
+                //Then add the number in right array to original array
+                //increment right array
             } else {
                 arr[k] = R[j];
                 j++;
@@ -190,15 +193,16 @@ public class Lab3Main {
     }
 
     /**
-     * Prints array of objects to both console and output file
-     *
-     * @param arr array to printout
+     * Prints array to both stdin and output file
+     * @param arr array
+     * @param start start of index (inclusive)
+     * @param end end of index (inclusive) --> this is size - 1
      */
-    public static void printArray(Object[] arr) {
+    public static void printArray(Object[] arr, int start, int end) {
 
         String out = "[";
-        for (Object obj : arr) {
-            out += obj + " ";
+        for (int i = start; i <= end; i++) {
+            out += arr[i] + " ";
         }
         out = out.substring(0, out.length() - 1) + "]";
         write(out + "\n");
