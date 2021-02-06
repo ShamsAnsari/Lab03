@@ -62,7 +62,8 @@ public class Lab3Main {
             double input = getUserInput(0.009, Double.MAX_VALUE, "\tArray[" + i + "] = ");
             arr[i] = choice == 1 ? new USD() : new C2D();
             arr[i].setDollars((int) input);
-            arr[i].setCents((int) (input * 100 % 100));
+            // Get the cents part, rounding needed because 19.99 * 100 % 100 = .98.  Precision error
+            arr[i].setCents((int)Math.round(input * 100 % 100));
         }
 
 
